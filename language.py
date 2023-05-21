@@ -41,8 +41,8 @@ message = {
         "2": "The level has ended."
     },
     "help": {
-        "1": "这是一个地图闯关游戏\n在游戏中可以输入w,a,s,d来控制的移动 \n(输入后要按enter表示确定)\n'■'是墙，'□'是空地\n祝您游玩愉快",
-        "2": "This is a map breaking game .\nIn the game, you can enter w, a, s, and d to control😊 's movement\n(After input, press enter to confirm)\n'■' is a wall, '□' is an open space.\nHave a good time."
+        "1": "这是一个地图闯关游戏\n在游戏中可以输入w,a,s,d来控制的移动 \n(输入后要按enter表示确定)\n'🧱'是墙，'🔲'是空地\n祝您游玩愉快",
+        "2": "This is a map breaking game .\nIn the game, you can enter w, a, s, and d to control😊 's movement\n(After input, press enter to confirm)\n'🧱' is a wall, '🔲' is an open space.\nHave a good time."
     },
     "input_err": {
         "1": "请输入正确的数字",

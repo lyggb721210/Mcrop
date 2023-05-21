@@ -18,41 +18,22 @@ import language as l
 import os
 
 
-def clear_text():
-    clear_text = None
-    clear_type = None
-    try:
+def clear(system):
+    if system == "posix":
+        os.system("clear")
+    elif system == "nt":
         os.system("cls")
-        clear_text = True
-        clear_type = "cls"
-    except:
-        clear_text = False
-    if clear_text == False:
-        try:
-            os.system("clear")
-            clear_text = True
-            clear_type = "clear"
-        except:
-            clear_text = False
-    return clear_text, clear_type
-
-
-def clear(clear_result):
-    if clear_result[1]:
-        os.system(clear_result)
 # end def
 
-
-def main():
-    clear_result = clear_text()
-    nmber = 0
-    inmap = map.inmap[nmber]
+if __name__ == '__main__':
+    lever = 0
+    inmap = map.inmap[lever]
     l.display_message(l.message.get("menu"), l.language)
     lastprint = "  "
     a = input("")
     if a == "1":
-        while True:
-            clear(clear_result)
+        while True :    
+            clear(os.name)
             c = 0
             outmap = ""
             while c != len(inmap):
@@ -80,26 +61,25 @@ def main():
             if acd <= 0:
                 lastprint = l.get_message("hit_wall").get(l.language)
             elif acd > 0:
-                if inmap[acd] == "■":
+                if inmap[acd] == "🧱":
                     lastprint = l.get_message("hit_wall").get(l.language)
-                elif inmap[acd] == "□":
+                elif inmap[acd] == "🔲":
                     lastprint = "  "
-                    inmap[add] = "□"
+                    inmap[add] = "🔲"
                     inmap[acd] = "😊"
                 elif inmap[acd] == "🚪":
                     while True:
-                        l.display_message(l.message.get(
-                            "lever_end"), l.language)
+                        clear(os.name)
+                        l.display_message(l.message.get("lever_end"), l.language)
                         a = input()
-                        clear(clear_result)
+                        clear(os.name)
                         if a == "1":
-                            if nmber < len(inmap):
-                                nmber = nmber + 1
-                                inmap = map.inmap[nmber]
+                            if lever < len(map.inmap)-1:
+                                lever = lever + 1
+                                inmap = map.inmap[lever]
                                 break
-                            elif nmber >= len(inmap):
-                                l.display_message(
-                                    l.message.get("end"), l.language)
+                            elif lever >= len(map.inmap)-1:
+                                l.display_message(l.message.get("end"), l.language)
                                 exit()
                         elif a == "2":
                             exit()
@@ -107,7 +87,3 @@ def main():
         l.display_message(l.message.get("help"), l.language)
     else:
         l.display_message(l.message.get("input_err"), l.language)
-
-
-if __name__ == '__main__':
-    main()
