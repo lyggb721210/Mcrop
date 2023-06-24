@@ -1,20 +1,17 @@
-#-*-coding:utf8;-*-
+# -*-coding:utf8;-*-
 """
-这是作者的第2个python程序若有问题请见谅
-有BUG可联系作者
 邮箱：lyggb721210@163.com
-作者：yxr / 栗子味东方
-当前版本：V1.23
-This is the author's second python program. If there is any problem, please forgive me
-The author can be contacted if there is a bug
+作者：yxr / lyggb721210
+当前版本：V0.91
 Email: lyggb721210@163.com
-Author: yxr/栗子味东方/lyggb721210
-Current version: V1.23
+Author: yxr / lyggb721210
+Current version: V0.91
 """
 
 import map
 import language as l
 import os
+import time
 
 
 def clear(system):
@@ -27,44 +24,43 @@ def clear(system):
 # end def
 
 if __name__ == "__main__":
+    #check save
     if os.path.exists("save.txt"):
-        f = open("save.txt", "r")
-        save = f.readlines()
-        if float(save[0][0:3]) >= 2:
+        try :
+            f = open("save.txt", "r")
+            save = f.readlines()
+            if float(save[0][0:3]) >= 2.2 and float(save[0][0:3])<=2:
+                l.display_message(l.message.get("menu"), l.language)
+                lever = 0
+                l.display_message(l.message.get("save_load_err1"), l.language)
+            elif float(save[0][0:3]) < 2.2 and float(save[0][0:3])>=2:
+                l.display_message(l.message.get("menu"), l.language)
+                lever = int(save[2][0:2])
+                if l.language == "1":
+                    print(" 3.继续游戏")
+                else:
+                    print(" 3.Continue the game")
+        except:
             l.display_message(l.message.get("menu"), l.language)
             lever = 0
-            if l.language == 1:
-                print("err:存档加载错误")
-            else:
-                print("err:Archive loading error")
-
-        elif float(save[0][0:3]) < 2:
-            l.display_message(l.message.get("menu"), l.language)
-            lever =int(save[1][0:2])
-            if l.language == "1":
-                print(" 3.继续游戏")
-            else:
-                print(" 3.Continue the game")
+            l.display_message(l.message.get("save_load_err1"), l.language)
     else:
         l.display_message(l.message.get("menu"), l.language)
 
     lastprint = "  "
     a = input("")
-    if a== "1" :
-        lever=0
-    inmap=map.map[lever]
-    while True:
-        if l.language=="1":
-            q=input("是否启用自动保存？[Y/n]")
-        else:
-            q=input("Whether to enable automatic save？[Y/n]")
-        if q=="y" or "Y" or "":
-            autosave=True
-            break
-        elif q=="N" or "n":
-            autosave=False
-            break
-    if a == "1" or "2":
+    if a == "1":
+        lever = 0
+    inmap = map.map[lever]
+    if a == "1" or a=="3":
+        while True:
+            q=input( l.display_message(l.message.get("check_autosafe"), l.language))
+            if q == "y" or q=="Y" or q=="":
+                autosave = True
+                break
+            elif q == "N" or q=="n":
+                autosave = False
+                break
         while True:
             clear(os.name)
             c = 0
@@ -76,16 +72,16 @@ if __name__ == "__main__":
             print(lastprint)
             l.display_message(l.message.get("in_game"), l.language)
             b = input("")
-            if b == "w":
+            if b == "w" or b=="W":
                 add = inmap.index("😊")
                 acd = add - inmap.index("\n") - 1
-            elif b == "a":
+            elif b == "a" or b=="A":
                 add = inmap.index("😊")
                 acd = add - 1
-            elif b == "d":
+            elif b == "d" or b=="D":
                 add = inmap.index("😊")
                 acd = add + 1
-            elif b == "s":
+            elif b == "s" or b=="S":
                 add = inmap.index("😊")
                 acd = add + inmap.index("\n") + 1
             else:
@@ -104,17 +100,17 @@ if __name__ == "__main__":
                     while True:
                         clear(os.name)
                         l.display_message(l.message.get("lever_end"), l.language)
-                        if autosave :
-                            f=open("save.txt","w")
-                            f.writelines(["1.0\n",str(lever)])
-                        if l.language=='1':
-                            print('已自动保存')
-                        else:
-                            print("Automatically saved")
+                        if autosave:
+                            f = open("save.txt", "w")
+                            print("2.1\n"+
+                            "这是一个存档文件（McroP）。  This is a save file for McroP\n"+
+                            str(lever + 1),sep="",end="",file=f)
+                            f.close()
+                            l.display_message(l.message.get("autosafed"), l.language)
                         a = input()
                         clear(os.name)
                         if a == "1":
-                            if lever < len(map.inmap) - 1:
+                            if lever < len(map.map) - 1:
                                 lever = lever + 1
                                 inmap = map.map[lever]
                                 break
