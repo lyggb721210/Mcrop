@@ -9,8 +9,7 @@ def choose_language():
             break
     return language
 
-
-language = choose_language()
+language = ""
 
 message = {
     "welcome": {
@@ -74,4 +73,4 @@ def get_message(message_dict):
 # end def
 
 
-display_message(message.get("welcome"), language)
+
