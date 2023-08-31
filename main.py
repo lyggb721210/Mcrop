@@ -5,7 +5,7 @@
 当前版本：V0.91
 Email: lyggb721210@163.com
 Author: yxr / lyggb721210
-Current version: V0.91
+Version: V0.91
 """
 
 import map
@@ -58,10 +58,13 @@ if __name__ == "__main__":
         l.display_message(l.message.get("menu"), l.language)
 
     lastprint = "  "
+    try:
+        f.close()
+    except:
+        f=""
     a = input("")
     if a == "1":
         lever = 0
-    f.close()
     inmap = map.map[lever]
     if a == "1" or a == "3":
         while True:
