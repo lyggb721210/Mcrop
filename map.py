@@ -1,19 +1,19 @@
-"""
-这是一个地图文件
-需要配合main.py文件使用
-地图文件版本：V1.01
-作者：yxr / 栗子味东方 /lyggb63
-邮箱：lyggb721210@163.com
-如有BUG请报告给作者
-
-This is a map file
-It needs to be used with main.py file
-Map file version: V1.01
-Author: yxr/栗子味东方l/lyggb63
-Email: lyggb721210@163.com
-Please report any bugs to the author
-"""
 #-*-coding:utf8;-*-
+
+#这是一个地图文件
+#需要配合main.py文件使用
+#地图文件版本：V1.03
+#作者：yxr / 栗子味东方 /lyggb63
+#邮箱：lyggb721210@163.com
+#如有BUG请报告给作者
+
+#This is a map file.
+#It needs to be used with main.py file.
+#Map file version: V1.03
+#Author: yxr/栗子味东方l/lyggb63
+#Email: lyggb721210@163.com
+#Please report any bugs to the author
+
 v=1.03
 map = [
        ["🧱","🧱","🧱","🧱","🧱","🧱","🧱","\n",

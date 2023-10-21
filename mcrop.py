@@ -1,12 +1,12 @@
 # -*-coding:utf8;-*-
-"""
-邮箱：lyggb721210@163.com
-作者：yxr / lyggb721210
-当前版本：V0.91
-Email: lyggb721210@163.com
-Author: yxr / lyggb721210
-Version: V0.91
-"""
+
+#邮箱：lyggb721210@163.com
+#作者：yxr / lyggb721210
+#当前版本：V0.91
+#Email: lyggb721210@163.com
+#Author: yxr / lyggb721210
+#Version: V0.91
+
 
 import map
 import language as l
@@ -65,7 +65,7 @@ if __name__ == "__main__":
     a = input("")
     if a == "1":
         lever = 0
-    inmap = map.map[lever]
+        inmap = map.map[lever]
     if a == "1" or a == "3":
         while True:
             q = input(l.display_message(l.message.get("check_autosafe"), l.language))
@@ -143,6 +143,7 @@ if __name__ == "__main__":
                             exit()
     elif a == "2":
         l.display_message(l.message.get("help"), l.language)
+        input()
     elif a== "4" :
         os.remove("save.txt")
     else:
