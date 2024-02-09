@@ -1,13 +1,17 @@
-#-*-coding:utf8;-*-
-from colorama import Fore,Style
+# -*-coding:utf8;-*-
+from colorama import Fore, Style
+
+
 def choose_language():
-    while True :
-        language = input("请选择您要使用的语言 Please select the language you want to use：\n1. 中 文 \n2. English\n请输入前面序号")
-        if language == "1" :
+    while True:
+        language = input(
+            "请选择您要使用的语言 Please select the language you want to use：\n1. 中 文 \n2. English\n请输入前面序号")
+        if language == "1":
             break
-        elif language == "2" :
+        elif language == "2":
             break
     return language
+
 
 language = ""
 
@@ -48,17 +52,25 @@ message = {
         "1": "请输入正确的数字",
         "2": "Please enter the correct number."
     },
-    "save_load_err1":{
-        "1":Fore.RED + "err:存档加载错误" +Style.RESET_ALL,
-        "2":Fore.RED + "err:Archive loading error" + Style.RESET_ALL
+    "save_load_err1": {
+        "1": Fore.RED + "err:存档加载错误" + Style.RESET_ALL,
+        "2": Fore.RED + "err:Archive loading error" + Style.RESET_ALL
     },
-    "check_autosafe":{
-        "1":"是否启用自动保存？[Y/n]",
-        "2":"Whether to enable automatic save？[Y/n]"
+    "check_autosafe": {
+        "1": "是否启用自动保存？[Y/n]",
+        "2": "Whether to enable automatic save？[Y/n]"
     },
-    "autosafed":{
-        "1":"已自动保存",
-        "2":"Automatically saved"
+    "autosafed": {
+        "1": "已自动保存",
+        "2": "Automatically saved"
+    },
+    "go_on_game": {
+        "1": " 3.继续游戏",
+        "2": " 3.Continue the game"
+    },
+    "clean_save": {
+        "1": " 4.清除存档和语言并退出",
+        "2": " 4.Clear Archive and Language and Exit"
     }
 }
 
@@ -71,6 +83,3 @@ def get_message(message_dict):
     return message.get(message_dict)
 
 # end def
-
-
-

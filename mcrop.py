@@ -12,6 +12,7 @@ import map
 import language as l
 import os
 import time
+from colorama import Back, Fore
 
 
 def clear(system):
@@ -40,14 +41,9 @@ if __name__ == "__main__":
                     l.language=save[4][0:2]
                 l.display_message(l.message.get("menu"), l.language)
                 lever = int(save[2][0:2])
-                if l.language == "1":
-                    print(" 3.继续游戏")
-                else:
-                    print(" 3.Continue the game")
-                if l.language == "1":
-                    print(" 4.清除存档和语言并退出")
-                else:
-                    print(" 4.Clear Archive and Language and Exit")
+                l.display_message(l.message.get("go_on_game"), l.language)
+                l.display_message(l.message.get("clean_save"), l.language)
+            f.close()
         except:
             l.language = l.choose_language()
             l.display_message(l.message.get("menu"), l.language)
@@ -58,14 +54,10 @@ if __name__ == "__main__":
         l.display_message(l.message.get("menu"), l.language)
 
     lastprint = "  "
-    try:
-        f.close()
-    except:
-        f=""
     a = input("")
     if a == "1":
         lever = 0
-        inmap = map.map[lever]
+        inmap =map.get_map(lever)
     if a == "1" or a == "3":
         while True:
             q = input(l.display_message(l.message.get("check_autosafe"), l.language))
@@ -89,16 +81,16 @@ if __name__ == "__main__":
             l.display_message(l.message.get("in_game"), l.language)
             b = input("")
             if b == "w" or b == "W":
-                add = inmap.index("😊")
+                add = inmap.index(map.user)
                 acd = add - inmap.index("\n") - 1
             elif b == "a" or b == "A":
-                add = inmap.index("😊")
+                add = inmap.index(map.user)
                 acd = add - 1
             elif b == "d" or b == "D":
-                add = inmap.index("😊")
+                add = inmap.index(map.user)
                 acd = add + 1
             elif b == "s" or b == "S":
-                add = inmap.index("😊")
+                add = inmap.index(map.user)
                 acd = add + inmap.index("\n") + 1
             else:
                 lastprint = l.get_message("err")[l.language]
@@ -106,15 +98,15 @@ if __name__ == "__main__":
             if acd <= 0:
                 lastprint = l.get_message("hit_wall")[l.language]
             elif acd > 0:
-                if inmap[acd] == "🧱":
+                if inmap[acd] == map.wall:
                     lastprint = l.get_message("hit_wall")[l.language]
-                elif inmap[acd] == "🔲":
+                elif inmap[acd] == map.road:
                     lastprint = "  "
-                    inmap[add] = "🔲"
-                    inmap[acd] = "😊"
-                elif inmap[acd] == "🚪":
+                    inmap[add] = map.road
+                    inmap[acd] = map.user
+                elif inmap[acd] == map.door:
                     costtime = round(time.time() - time1, 2)
-                    while True:
+                    while True :
                         clear(os.name)
                         l.display_message(l.message.get("lever_end"), l.language)
                         print(" 用时：" + str(costtime) + "s")
@@ -133,7 +125,7 @@ if __name__ == "__main__":
                         if a == "1":
                             if lever < len(map.map) - 1:
                                 lever = lever + 1
-                                inmap = map.map[lever]
+                                inmap = map.get_map(lever)
                                 time1 = time.time()
                                 break
                             elif lever >= len(map.map) - 1:
