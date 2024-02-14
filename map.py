@@ -1,5 +1,3 @@
-# -*-coding:utf8;-*-
-
 # 这是一个地图文件
 # 需要配合main.py文件使用
 # 地图文件版本：V1.03
@@ -14,12 +12,14 @@
 # Email: lyggb721210@163.com
 # Please report any bugs to the author
 
-from colorama import Back, Fore, Style
+from colorama import Back, Fore, Style,init
+init()
 
 v = 1.03
+
 wall = Back.LIGHTBLACK_EX+Fore.LIGHTBLACK_EX+"  "
 road = Back.WHITE+Fore.WHITE+"  "
-user = Back.YELLOW+Fore.YELLOW+"  "
+user = Back.BLUE+Fore.BLUE+"  "
 door = Back.GREEN+Fore.GREEN+"  "
 
 map = [
