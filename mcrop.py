@@ -1,10 +1,9 @@
 # 邮箱：lyggb721210@163.com
 # 作者：yxr / lyggb721210
-# 当前版本：V0.91
+# 当前版本：V1.0
 # Email: lyggb721210@163.com
 # Author: yxr / lyggb721210
-# Version: V0.91
-
+# Version: V1.0
 
 import map
 import language as l
@@ -55,9 +54,14 @@ if __name__ == "__main__":
     if a == "1":
         lever = 0
         in_map = map.get_map(lever)
-    if a == "1" or a == "3":
+    if a == '3':
+        if not ("lever" in dir()):
+            #l.display_message(l.message.get("3error"), l.language)
+            exit()
+    if a == "1" or a == "3":  
         while True:
-            q = input(l.display_message(l.message.get("check_autosafe"), l.language))
+            q = input(l.display_message(
+                l.message.get("check_autosafe"), l.language))
             if q == "y" or q == "Y" or q == "":
                 auto_save = True
                 break
@@ -90,13 +94,13 @@ if __name__ == "__main__":
                 add = in_map.index(map.user)
                 acd = add + in_map.index("\n") + 1
             else:
-                last_print = l.get_message("err")[l.language]
+                last_print = l.message["err"][l.language]
                 continue
             if acd <= 0:
-                last_print = l.get_message("hit_wall")[l.language]
+                last_print = l.message["hit_wall"][l.language]
             elif acd > 0:
                 if in_map[acd] == map.wall:
-                    last_print = l.get_message("hit_wall")[l.language]
+                    last_print = l.message["hit_wall"][l.language]
                 elif in_map[acd] == map.road:
                     last_print = "  "
                     in_map[add] = map.road
@@ -105,7 +109,8 @@ if __name__ == "__main__":
                     cost_time = round(time.time() - time1, 2)
                     while True:
                         clear(os.name)
-                        l.display_message(l.message.get("lever_end"), l.language)
+                        l.display_message(l.message.get(
+                            "lever_end"), l.language)
                         print(" 用时：" + str(cost_time) + "s")
                         if auto_save:
                             f = open("save.txt", "w")
@@ -116,7 +121,8 @@ if __name__ == "__main__":
                                   l.language,
                                   sep="\n", end="", file=f)
                             f.close()
-                            l.display_message(l.message["autosafed"], l.language)
+                            l.display_message(
+                                l.message["autosafed"], l.language)
                         a = input()
                         clear(os.name)
                         if a == "1":
@@ -134,6 +140,8 @@ if __name__ == "__main__":
         l.display_message(l.message.get("help"), l.language)
         input()
     elif a == "4":
+        if not os.path.exists("save.txt"):
+            exit()
         os.remove("save.txt")
-    else:
-        l.display_message(l.message.get("input_err"), l.language)
+    #else:
+        #l.display_message(l.message.get("input_err"), l.language)

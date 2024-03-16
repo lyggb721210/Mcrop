@@ -1,13 +1,13 @@
 # 这是一个地图文件
 # 需要配合main.py文件使用
-# 地图文件版本：V1.03
+# 地图文件版本：V1.04
 # 作者：yxr / 栗子味东方 /lyggb63
 # 邮箱：lyggb721210@163.com
 # 如有BUG请报告给作者
 
 # This is a map file.
 # It needs to be used with main.py file.
-# Map file version: V1.03
+# Map file version: V1.04
 # Author: yxr/栗子味东方l/lyggb63
 # Email: lyggb721210@163.com
 # Please report any bugs to the author
@@ -15,7 +15,7 @@
 from colorama import Back, Fore, Style,init
 init()
 
-v = 1.03
+v = 1.04
 
 wall = Back.LIGHTBLACK_EX+Fore.LIGHTBLACK_EX+"  "
 road = Back.WHITE+Fore.WHITE+"  "
