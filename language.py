@@ -1,14 +1,12 @@
-# -*-coding:utf8;-*-
 from map import wall, user, road, door
 from colorama import Fore, Style, init
 
 init()
 
-
 def choose_language():
 	while True:
 		language = input(
-			"请选择您要使用的语言 Please select the language you want to use：\n1. 中 文 \n2. English(machine translation)\n请输入前面序号")
+			"请选择您要使用的语言 Please select the language you want to use：\n1. 中 文 \n2. English(machine translation)\n请输入前面序号\n")
 		if language == "1":
 			break
 		elif language == "2":
@@ -24,8 +22,8 @@ message = {
 		"2": "Welcome to use"
 	},
 	"menu": {
-		"1": " 1.新游戏\n 2.帮助\n 请输入前面序号\n 输入其他内容：退出\n",
-		"2": " 1.New Game\n 2.Help.\n Please enter the front serial number.\n Enter other content: Exit\n"
+		"1": "请输入前面序号\n 输入其他内容：退出\n 1.新游戏\n 2.帮助",
+		"2": "Please enter the front serial number.\n Enter other content: Exit\n 1.New Game\n 2.Help."
 	},
 	"in_game": {
 		"1": "请输入w,a,s,d.",
@@ -44,8 +42,8 @@ message = {
 		"2": " Successful customs cloms clearance\n 1.Next level\n 2.Exit\n Please enter the front serial number."
 	},
 	"end": {
-		"1": "关卡已结束",
-		"2": "The level has ended."
+		"1": "您已通关。",
+		"2": "You have cleared the customs."
 	},
 	"help": {
 		"1": "这是一个地图闯关游戏\n在游戏中可以输入w,a,s,d来控制" + user + Style.RESET_ALL + "的移动 \n(输入后要按enter表示确定)\n'" + wall + Style.RESET_ALL + "'是墙，'" + road + Style.RESET_ALL + "'是空地,'"+door+Style.RESET_ALL +"'是终点\n祝您游玩愉快 \n按Enter键退出。",
@@ -56,7 +54,7 @@ message = {
 		"2": "Please enter the correct number."
 	},
 	"save_load_err1": {
-		"1": Fore.RED + "error:存档加载错误" + Style.RESET_ALL+"可以删除程序目录下的save.txt删除存档。",
+		"1": Fore.RED + "error:存档加载错误" + Style.RESET_ALL+"\n可以删除程序目录下的save.txt删除存档。",
 		"2": Fore.RED + "error:Archive loading error" + Style.RESET_ALL+"\nYou can delete the save. txt file in the program directory to delete the archive."
 	},
 	"check_autosafe": {
@@ -88,5 +86,3 @@ def display_message(message_dict, language):
 
 def get_message(message_dict):
 	return message.get(message_dict)
-
-# end def

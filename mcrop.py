@@ -1,10 +1,12 @@
-# 邮箱：lyggb721210@163.com
-# 作者：yxr / lyggb721210
-# 当前版本：V1.0
-# Email: lyggb721210@163.com
-# Author: yxr / lyggb721210
-# Version: V1.0
-
+"""
+这是一个在Python上运行的迷宫挑战游戏
+This is a maze challenge game on Python.
+Email 邮箱：lyggb721210@163.com
+Author 作者：lygyxr / lyggb721210 / yxr
+Version 当前版本：V1.1
+Please report any bugs to the author. 
+如果有BUG请报告给作者。
+"""
 import map
 import language as l
 import os
@@ -17,28 +19,26 @@ def clear(system):
     elif system == "nt":
         os.system("cls")
 
-
-# end def
-
 if __name__ == "__main__":
     # 检查存档
     if os.path.exists("save.txt"):
         try:
             f = open("save.txt", "r")
             save = f.readlines()
-            if 2.2 <= float(save[0][0:3]) <= 2:
-                l.language = l.choose_language()
-                l.display_message(l.message.get("welcome"), l.language)
-                l.display_message(l.message.get("menu"), l.language)
-                lever = 0
-                l.display_message(l.message.get("save_load_err1"), l.language)
-            elif 2.2 > float(save[0][0:3]) >= 2:
+
+            if 2.2 > float(save[0][0:3]) >= 2:
                 if len(save) >= 5 and float(save[0][0:4]) >= 2.12:
                     l.language = save[4][0:2]
                 l.display_message(l.message.get("menu"), l.language)
                 lever = int(save[2][0:2])
                 l.display_message(l.message.get("go_on_game"), l.language)
                 l.display_message(l.message.get("clean_save"), l.language)
+            else:
+                l.language = l.choose_language()
+                l.display_message(l.message.get("welcome"), l.language)
+                l.display_message(l.message.get("menu"), l.language)
+                lever = 0
+                l.display_message(l.message.get("save_load_err1"), l.language)
             f.close()
         except:
             l.language = l.choose_language()
@@ -56,9 +56,14 @@ if __name__ == "__main__":
         in_map = map.get_map(lever)
     if a == '3':
         if not ("lever" in dir()):
-            #l.display_message(l.message.get("3error"), l.language)
+            # l.display_message(l.message.get("3error"), l.language)
             exit()
-    if a == "1" or a == "3":  
+        else:
+            if lever >= len(map.map) - 1:
+            	l.display_message(l.message["end"], l.language)
+            	exit()
+            in_map = map.get_map(lever=lever)
+    if a == "1" or a == "3":
         while True:
             q = input(l.display_message(
                 l.message.get("check_autosafe"), l.language))
@@ -123,7 +128,7 @@ if __name__ == "__main__":
                             f.close()
                             l.display_message(
                                 l.message["autosafed"], l.language)
-                        a = input()
+                        a = input("")
                         clear(os.name)
                         if a == "1":
                             if lever < len(map.map) - 1:
@@ -143,5 +148,5 @@ if __name__ == "__main__":
         if not os.path.exists("save.txt"):
             exit()
         os.remove("save.txt")
-    #else:
-        #l.display_message(l.message.get("input_err"), l.language)
+    # else:
+        # l.display_message(l.message.get("input_err"), l.language)
