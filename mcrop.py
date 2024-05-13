@@ -4,13 +4,18 @@ This is a maze challenge game on Python.
 Email 邮箱：lyggb721210@163.com
 Author 作者：lygyxr / lyggb721210 / yxr
 Version 当前版本：V1.1
-Please report any bugs to the author. 
+Please report any bugs to the author.
 如果有BUG请报告给作者。
 """
+
 import map
 import language as l
 import os
 import time
+
+from colorama import init
+
+init()
 
 
 def clear(system):
@@ -18,6 +23,7 @@ def clear(system):
         os.system("clear")
     elif system == "nt":
         os.system("cls")
+
 
 if __name__ == "__main__":
     # 检查存档
@@ -54,19 +60,19 @@ if __name__ == "__main__":
     if a == "1":
         lever = 0
         in_map = map.get_map(lever)
-    if a == '3':
+    if a == "3":
         if not ("lever" in dir()):
             # l.display_message(l.message.get("3error"), l.language)
             exit()
         else:
             if lever >= len(map.map) - 1:
-            	l.display_message(l.message["end"], l.language)
-            	exit()
+                l.display_message(l.message["end"], l.language)
+                exit()
             in_map = map.get_map(lever=lever)
     if a == "1" or a == "3":
         while True:
-            q = input(l.display_message(
-                l.message.get("check_autosafe"), l.language))
+            l.display_message(l.message["check_autosafe"], l.language, end='')
+            q = input()
             if q == "y" or q == "Y" or q == "":
                 auto_save = True
                 break
@@ -114,17 +120,22 @@ if __name__ == "__main__":
                     cost_time = round(time.time() - time1, 2)
                     while True:
                         clear(os.name)
-                        l.display_message(l.message.get(
-                            "lever_end"), l.language)
-                        print(" 用时：" + str(cost_time) + "s")
+                        l.display_message(
+                            l.message.get("lever_end"), l.language, end=""
+                        )
+                        print(str(cost_time) + "s")
                         if auto_save:
                             f = open("save.txt", "w")
-                            print("2.13",
-                                  "这是一个存档文件（McroP）。  This is a save file for McroP",
-                                  str(lever + 1),
-                                  time.asctime(),
-                                  l.language,
-                                  sep="\n", end="", file=f)
+                            print(
+                                "2.13",
+                                "这是一个存档文件（McroP）。  This is a save file for McroP",
+                                str(lever + 1),
+                                time.asctime(),
+                                l.language,
+                                sep="\n",
+                                end="",
+                                file=f,
+                            )
                             f.close()
                             l.display_message(
                                 l.message["autosafed"], l.language)
@@ -149,4 +160,4 @@ if __name__ == "__main__":
             exit()
         os.remove("save.txt")
     # else:
-        # l.display_message(l.message.get("input_err"), l.language)
+    # l.display_message(l.message.get("input_err"), l.language)
