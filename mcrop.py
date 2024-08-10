@@ -8,8 +8,9 @@ Please report any bugs to the author.
 如果有BUG请报告给作者。
 """
 
+import json
 import map
-import language as l
+# import language as l
 import os
 import time
 
@@ -25,6 +26,23 @@ def clear(system):
         os.system("cls")
 
 
+def choose_language_file():
+    clear(os.name)
+    while True:
+        print("请选择您要使用的语言 Please select the language you want to use:")
+        files = os.listdir("./lang")
+        for i in files:
+            print(i)
+        print("请输入前面序号。Please enter the preceding serial number.")
+        _language = (input())
+        try:
+            _a = int(_language) - 1
+            if _a <= len(files):
+                return "./lang/" + files[_a]
+        except ValueError:
+            pass
+
+
 if __name__ == "__main__":
     # 检查存档
     if os.path.exists("save.txt"):
@@ -33,27 +51,31 @@ if __name__ == "__main__":
             save = f.readlines()
 
             if 2.2 > float(save[0][0:3]) >= 2:
-                if len(save) >= 5 and float(save[0][0:4]) >= 2.12:
-                    l.language = save[4][0:2]
-                l.display_message(l.message.get("menu"), l.language)
+                # if len(save) >= 5 and float(save[0][0:4]) >= 2.12:
+                lang_file = save[4][0:-2]
+                message = json.load(open(lang_file, "r"))
+                print(message.get("menu"))
                 lever = int(save[2][0:2])
-                l.display_message(l.message.get("go_on_game"), l.language)
-                l.display_message(l.message.get("clean_save"), l.language)
+                print(message.get("go_on_game"))
+                print(message.get("clean_save"))
             else:
-                l.language = l.choose_language()
-                l.display_message(l.message.get("welcome"), l.language)
-                l.display_message(l.message.get("menu"), l.language)
+                lang_file = choose_language_file()
+                message = json.load(open(lang_file, "r"))
+                print(message.get("welcome"))
+                print(message.get("menu"))
                 lever = 0
-                l.display_message(l.message.get("save_load_err1"), l.language)
+                print(message.get("save_load_err1"))
             f.close()
         except:
-            l.language = l.choose_language()
-            l.display_message(l.message.get("menu"), l.language)
+            lang_file = choose_language_file()
+            message = json.load(open(lang_file, "r"))
+            print(message.get("menu"))
             lever = 0
-            l.display_message(l.message.get("save_load_err1"), l.language)
+            print(message.get("save_load_err1"))
     else:
-        l.language = l.choose_language()
-        l.display_message(l.message.get("menu"), l.language)
+        lang_file = choose_language_file()
+        message = json.load(open(lang_file, "r"))
+        print(message.get("menu"))
 
     last_print = "  "
     a = input("")
@@ -62,16 +84,16 @@ if __name__ == "__main__":
         in_map = map.get_map(lever)
     if a == "3":
         if not ("lever" in dir()):
-            # l.display_message(l.message.get("3error"), l.language)
+            # print(message.get("3error"))
             exit()
         else:
             if lever >= len(map.map) - 1:
-                l.display_message(l.message["end"], l.language)
+                print(message["end"])
                 exit()
             in_map = map.get_map(lever=lever)
     if a == "1" or a == "3":
         while True:
-            l.display_message(l.message["check_autosafe"], l.language, end='')
+            print(message["check_autosafe"], end='')
             q = input()
             if q == "y" or q == "Y" or q == "":
                 auto_save = True
@@ -90,7 +112,7 @@ if __name__ == "__main__":
                 c = c + 1
             print(outmap)
             print(last_print)
-            l.display_message(l.message.get("in_game"), l.language)
+            print(message.get("in_game"))
             b = input("")
             if b == "w" or b == "W":
                 add = in_map.index(map.user)
@@ -105,13 +127,13 @@ if __name__ == "__main__":
                 add = in_map.index(map.user)
                 acd = add + in_map.index("\n") + 1
             else:
-                last_print = l.message["err"][l.language]
+                last_print = message["err"]
                 continue
             if acd <= 0:
-                last_print = l.message["hit_wall"][l.language]
+                last_print = message["hit_wall"]
             elif acd > 0:
                 if in_map[acd] == map.wall:
-                    last_print = l.message["hit_wall"][l.language]
+                    last_print = message["hit_wall"]
                 elif in_map[acd] == map.road:
                     last_print = "  "
                     in_map[add] = map.road
@@ -120,8 +142,8 @@ if __name__ == "__main__":
                     cost_time = round(time.time() - time1, 2)
                     while True:
                         clear(os.name)
-                        l.display_message(
-                            l.message.get("lever_end"), l.language, end=""
+                        print(
+                            message.get("lever_end"), end=""
                         )
                         print(str(cost_time) + "s")
                         if auto_save:
@@ -131,14 +153,14 @@ if __name__ == "__main__":
                                 "这是一个存档文件（McroP）。  This is a save file for McroP",
                                 str(lever + 1),
                                 time.asctime(),
-                                l.language,
+                                lang_file,
                                 sep="\n",
                                 end="",
                                 file=f,
                             )
                             f.close()
-                            l.display_message(
-                                l.message["autosafed"], l.language)
+                            print(
+                                message["autosafed"])
                         a = input("")
                         clear(os.name)
                         if a == "1":
@@ -148,16 +170,16 @@ if __name__ == "__main__":
                                 time1 = time.time()
                                 break
                             elif lever >= len(map.map) - 1:
-                                l.display_message(l.message["end"], l.language)
+                                print(message["end"])
                                 exit()
                         elif a == "2":
                             exit()
     elif a == "2":
-        l.display_message(l.message.get("help"), l.language)
+        print(message.get("help"))
         input()
     elif a == "4":
         if not os.path.exists("save.txt"):
             exit()
         os.remove("save.txt")
     # else:
-    # l.display_message(l.message.get("input_err"), l.language)
+    # print(message.get("input_err"))

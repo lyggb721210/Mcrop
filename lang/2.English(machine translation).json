@@ -1,0 +1,17 @@
+{
+    "welcome": "Welcome to use",
+    "menu": "Please enter the front serial number.\n Enter other content: Exit\n 1.New Game\n 2.Help.",
+    "in_game": "Please enter w, a, s, d.",
+    "err": "Please enter w, a, s, d (top, left, bottom, right).",
+    "hit_wall":"Ah, I hit the wall.",
+    "lever_end": " Successful customs cloms clearance\n 1.Next level\n 2.Exit\n Please enter the front serial number.\n Clearance time:",
+    "end":"You have cleared the customs.",
+    "help":"This is a map level game. \nIn the game, you can enter w, a, s, and d to control the movement of the blue square (press enter to confirm). \nThe gray square is the wall, the white square is the open space, and the green square is the endpoint. \nHave a pleasant game. \nPress Enter to exit.",
+    "input_err":"Please enter the correct number.",
+    "save_load_err1":"Error: Archive loading error. You can delete the save.txt file in the program directory to delete the archive.",
+    "check_autosafe": "Whether to enable automatic save？[Y/n]",
+    "autosafed": "Automatically saved",
+    "go_on_game": " 3.Continue the game",
+    "clean_save":  " 4.Clear Archive and Language and Exit",
+    "3error": "???What are you doing\nerror:Unknown error."
+}
