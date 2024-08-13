@@ -9,15 +9,36 @@ Please report any bugs to the author.
 """
 
 import json
-import map
-# import language as l
 import os
 import time
 
-from colorama import init
+from colorama import init, Back, Fore, Style
 
 init()
+wall = Back.LIGHTBLACK_EX + Fore.LIGHTBLACK_EX + "  "
+road = Back.WHITE + Fore.WHITE + "  "
+user = Back.BLUE + Fore.BLUE + "  "
+door = Back.GREEN + Fore.GREEN + "  "
 
+
+def get_map(map: list, lever: int):
+    _map = []
+    for i in map[lever]:
+        if i == 1:
+            i = wall
+        elif i == 2:
+            i = road
+        elif i == 3:
+            i = user
+        elif i == 4:
+            i = door
+        elif i == "\n":
+            i = "\n"
+        else:
+            print(Fore.RED + "err:Map loading error." + Style.RESET_ALL)
+        _map.append(i)
+    _map.append(Style.RESET_ALL)
+    return _map
 
 def clear(system):
     if system == "posix":
@@ -45,6 +66,7 @@ def choose_language_file():
 
 if __name__ == "__main__":
     # 检查存档
+    os.chdir(os.path.dirname(os.path.abspath(__file__)))
     if os.path.exists("save.txt"):
         try:
             f = open("save.txt", "r")
@@ -77,20 +99,22 @@ if __name__ == "__main__":
         message = json.load(open(lang_file, "r"))
         print(message.get("menu"))
 
+    with open("./maps.json", "r") as f:
+        map = json.load(f)
     last_print = "  "
     a = input("")
     if a == "1":
         lever = 0
-        in_map = map.get_map(lever)
+        in_map = get_map(map['maps'], lever)
     if a == "3":
         if not ("lever" in dir()):
             # print(message.get("3error"))
             exit()
         else:
-            if lever >= len(map.map) - 1:
+            if lever >= len(map) - 1:
                 print(message["end"])
                 exit()
-            in_map = map.get_map(lever=lever)
+            in_map = get_map(map["maps"], lever)
     if a == "1" or a == "3":
         while True:
             print(message["check_autosafe"], end='')
@@ -115,16 +139,16 @@ if __name__ == "__main__":
             print(message.get("in_game"))
             b = input("")
             if b == "w" or b == "W":
-                add = in_map.index(map.user)
+                add = in_map.index(user)
                 acd = add - in_map.index("\n") - 1
             elif b == "a" or b == "A":
-                add = in_map.index(map.user)
+                add = in_map.index(user)
                 acd = add - 1
             elif b == "d" or b == "D":
-                add = in_map.index(map.user)
+                add = in_map.index(user)
                 acd = add + 1
             elif b == "s" or b == "S":
-                add = in_map.index(map.user)
+                add = in_map.index(user)
                 acd = add + in_map.index("\n") + 1
             else:
                 last_print = message["err"]
@@ -132,13 +156,13 @@ if __name__ == "__main__":
             if acd <= 0:
                 last_print = message["hit_wall"]
             elif acd > 0:
-                if in_map[acd] == map.wall:
+                if in_map[acd] == wall:
                     last_print = message["hit_wall"]
-                elif in_map[acd] == map.road:
+                elif in_map[acd] == road:
                     last_print = "  "
-                    in_map[add] = map.road
-                    in_map[acd] = map.user
-                elif in_map[acd] == map.door:
+                    in_map[add] = road
+                    in_map[acd] = user
+                elif in_map[acd] == door:
                     cost_time = round(time.time() - time1, 2)
                     while True:
                         clear(os.name)
@@ -164,12 +188,12 @@ if __name__ == "__main__":
                         a = input("")
                         clear(os.name)
                         if a == "1":
-                            if lever < len(map.map) - 1:
+                            if lever < len(map) - 1:
                                 lever = lever + 1
-                                in_map = map.get_map(lever)
+                                in_map = get_map(map["maps"], lever)
                                 time1 = time.time()
                                 break
-                            elif lever >= len(map.map) - 1:
+                            elif lever >= len(map) - 1:
                                 print(message["end"])
                                 exit()
                         elif a == "2":
