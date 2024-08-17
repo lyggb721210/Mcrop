@@ -8,7 +8,7 @@
     "end": "您已通关。",
     "help": "这是一个地图闯关游戏\n在游戏中可以输入w,a,s,d来控制蓝色方块的移动(输入后要按enter表示确定)\n \\x1b[100m\\x1b[90m  是墙，白色方块是空地，绿色方块是终点\\n祝您游玩愉快 \\n按Enter键退出。",
     "input_err": "请输入正确的数字",
-    "save_load_err1": "error:存档加载错误，可以删除程序目录下的save.txt删除存档。",
+    "save_load_err1": "error:存档加载错误，可以输入4重置存档。",
     "check_autosafe": "是否启用自动保存？[Y/n]",
     "autosafed": "已自动保存",
     "go_on_game": " 3.继续游戏",

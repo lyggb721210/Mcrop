@@ -21,9 +21,9 @@ user = Back.BLUE + Fore.BLUE + "  "
 door = Back.GREEN + Fore.GREEN + "  "
 
 
-def get_map(map: list, lever: int):
+def get_map(plat: list, lever: int):
     _map = []
-    for i in map[lever]:
+    for i in plat[lever]:
         if i == 1:
             i = wall
         elif i == 2:
@@ -39,6 +39,7 @@ def get_map(map: list, lever: int):
         _map.append(i)
     _map.append(Style.RESET_ALL)
     return _map
+
 
 def clear(system):
     if system == "posix":
@@ -67,54 +68,57 @@ def choose_language_file():
 if __name__ == "__main__":
     # 检查存档
     os.chdir(os.path.dirname(os.path.abspath(__file__)))
-    if os.path.exists("save.txt"):
-        try:
-            f = open("save.txt", "r")
-            save = f.readlines()
+    try:
+        with open("./save/save.json", "r") as f:
+            save = json.load(f)
 
-            if 2.2 > float(save[0][0:3]) >= 2:
-                # if len(save) >= 5 and float(save[0][0:4]) >= 2.12:
-                lang_file = save[4][0:-2]
+        if 3.0 <= save["v"] <= 3.2:
+            # if len(save) >= 5 and float(save[0][0:4]) >= 2.12:
+            if save["save"]:
+                lever = save["lever"]
+                lang_file = save["lang_file"]
                 message = json.load(open(lang_file, "r"))
                 print(message.get("menu"))
-                lever = int(save[2][0:2])
                 print(message.get("go_on_game"))
                 print(message.get("clean_save"))
             else:
+                lever = 0
                 lang_file = choose_language_file()
                 message = json.load(open(lang_file, "r"))
-                print(message.get("welcome"))
                 print(message.get("menu"))
-                lever = 0
-                print(message.get("save_load_err1"))
-            f.close()
-        except:
+                print(message.get("clean_save"))
+        else:
             lang_file = choose_language_file()
             message = json.load(open(lang_file, "r"))
+            print(message.get("welcome"))
             print(message.get("menu"))
+            print(message.get("clean_save"))
             lever = 0
             print(message.get("save_load_err1"))
-    else:
+        # f.close()
+    except:
         lang_file = choose_language_file()
         message = json.load(open(lang_file, "r"))
         print(message.get("menu"))
+        lever = 0
+        print(message.get("save_load_err1"))
 
     with open("./maps.json", "r") as f:
-        map = json.load(f)
+        the_map = json.load(f)
     last_print = "  "
     a = input("")
     if a == "1":
         lever = 0
-        in_map = get_map(map['maps'], lever)
+        in_map = get_map(the_map['maps'], lever)
     if a == "3":
         if not ("lever" in dir()):
             # print(message.get("3error"))
             exit()
         else:
-            if lever >= len(map) - 1:
+            if lever >= len(the_map["maps"]) - 1:
                 print(message["end"])
                 exit()
-            in_map = get_map(map["maps"], lever)
+            in_map = get_map(the_map["maps"], lever)
     if a == "1" or a == "3":
         while True:
             print(message["check_autosafe"], end='')
@@ -166,34 +170,31 @@ if __name__ == "__main__":
                     cost_time = round(time.time() - time1, 2)
                     while True:
                         clear(os.name)
-                        print(
-                            message.get("lever_end"), end=""
-                        )
+                        print(message.get("lever_end"), end="")
                         print(str(cost_time) + "s")
                         if auto_save:
-                            f = open("save.txt", "w")
-                            print(
-                                "2.13",
-                                "这是一个存档文件（McroP）。  This is a save file for McroP",
-                                str(lever + 1),
-                                time.asctime(),
-                                lang_file,
-                                sep="\n",
-                                end="",
-                                file=f,
-                            )
-                            f.close()
-                            print(
-                                message["autosafed"])
+                            with open("./save/save.json", "w") as f:
+                                f.write(json.dumps(
+                                    {
+                                        "save": True,
+                                        "v": 3.0,
+                                        "lever": lever + 1,
+                                        "lang_file": lang_file,
+                                    },
+                                    sort_keys=True,
+                                    indent=4
+                                ))
+                            # f.close()
+                            print(message["autosafed"])
                         a = input("")
                         clear(os.name)
                         if a == "1":
-                            if lever < len(map) - 1:
+                            if lever < len(the_map["maps"]) - 1:
                                 lever = lever + 1
-                                in_map = get_map(map["maps"], lever)
+                                in_map = get_map(the_map["maps"], lever)
                                 time1 = time.time()
                                 break
-                            elif lever >= len(map) - 1:
+                            elif lever >= len(the_map["maps"]) - 1:
                                 print(message["end"])
                                 exit()
                         elif a == "2":
@@ -202,8 +203,16 @@ if __name__ == "__main__":
         print(message.get("help"))
         input()
     elif a == "4":
-        if not os.path.exists("save.txt"):
-            exit()
-        os.remove("save.txt")
+        with open("./save/save.json", "w") as f:
+            f.write(json.dumps(
+                {
+                    "v": 3.0,
+                    "save": False,
+                },
+                sort_keys=True,
+                indent=4
+            ))
+        # f.close()
+
     # else:
     # print(message.get("input_err"))

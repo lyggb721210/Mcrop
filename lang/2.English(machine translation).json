@@ -8,7 +8,7 @@
     "end":"You have cleared the customs.",
     "help":"This is a map level game. \nIn the game, you can enter w, a, s, and d to control the movement of the blue square (press enter to confirm). \nThe gray square is the wall, the white square is the open space, and the green square is the endpoint. \nHave a pleasant game. \nPress Enter to exit.",
     "input_err":"Please enter the correct number.",
-    "save_load_err1":"Error: Archive loading error. You can delete the save.txt file in the program directory to delete the archive.",
+    "save_load_err1":"Error: Archive loading error. You can enter 4 to reset the archive.",
     "check_autosafe": "Whether to enable automatic save？[Y/n]",
     "autosafed": "Automatically saved",
     "go_on_game": " 3.Continue the game",
