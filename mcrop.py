@@ -19,6 +19,7 @@ wall = Back.LIGHTBLACK_EX + Fore.LIGHTBLACK_EX + "  "
 road = Back.WHITE + Fore.WHITE + "  "
 user = Back.BLUE + Fore.BLUE + "  "
 door = Back.GREEN + Fore.GREEN + "  "
+save_v = 3.0
 
 
 def get_map(plat: list, lever: int):
@@ -56,17 +57,30 @@ def choose_language_file():
         for i in files:
             print(i)
         print("请输入前面序号。Please enter the preceding serial number.")
-        _language = (input())
+        _language = input()
         try:
             _a = int(_language) - 1
             if _a <= len(files):
-                return "./lang/" + files[_a]
+                file = "./lang/" + files[_a]
+                with open("./save/save.json", "w") as f:
+                    f.write(json.dumps(
+                        {
+                            "save": True,
+                            "v": save_v,
+                            "lever": 0,
+                            "lang_file": file,
+                        },
+                        sort_keys=True,
+                        indent=4
+                    ))
+                return file
+
         except ValueError:
             pass
 
 
 if __name__ == "__main__":
-    # 检查存档
+    # 检查存档6
     os.chdir(os.path.dirname(os.path.abspath(__file__)))
     try:
         with open("./save/save.json", "r") as f:
@@ -79,7 +93,8 @@ if __name__ == "__main__":
                 lang_file = save["lang_file"]
                 message = json.load(open(lang_file, "r"))
                 print(message.get("menu"))
-                print(message.get("go_on_game"))
+                if lever != 0:
+                    print(message.get("go_on_game"))
                 print(message.get("clean_save"))
             else:
                 lever = 0
@@ -107,6 +122,7 @@ if __name__ == "__main__":
         the_map = json.load(f)
     last_print = "  "
     a = input("")
+    in_map = get_map(the_map["maps"], lever)
     if a == "1":
         lever = 0
         in_map = get_map(the_map['maps'], lever)
@@ -118,7 +134,7 @@ if __name__ == "__main__":
             if lever >= len(the_map["maps"]) - 1:
                 print(message["end"])
                 exit()
-            in_map = get_map(the_map["maps"], lever)
+            # in_map = get_map(the_map["maps"], lever)
     if a == "1" or a == "3":
         while True:
             print(message["check_autosafe"], end='')
@@ -200,7 +216,8 @@ if __name__ == "__main__":
                         elif a == "2":
                             exit()
     elif a == "2":
-        print(message.get("help"))
+        print(message.get("help").format(wall=wall + Style.RESET_ALL, road=road + Style.RESET_ALL,
+                                         user=user + Style.RESET_ALL, door=door + Style.RESET_ALL))
         input()
     elif a == "4":
         with open("./save/save.json", "w") as f:

@@ -6,7 +6,7 @@
     "hit_wall":"Ah, I hit the wall.",
     "lever_end": " Successful customs cloms clearance\n 1.Next level\n 2.Exit\n Please enter the front serial number.\n Clearance time:",
     "end":"You have cleared the customs.",
-    "help":"This is a map level game. \nIn the game, you can enter w, a, s, and d to control the movement of the blue square (press enter to confirm). \nThe gray square is the wall, the white square is the open space, and the green square is the endpoint. \nHave a pleasant game. \nPress Enter to exit.",
+    "help":"This is a map level game. \nIn the game, you can enter w, a, s, and d to control the movement of the blue square (press enter to confirm). \nThe {wall} is the wall, the {road} is the road, and the {door} is the endpoint. \nHave a pleasant game. \nPress Enter to exit.",
     "input_err":"Please enter the correct number.",
     "save_load_err1":"Error: Archive loading error. You can enter 4 to reset the archive.",
     "check_autosafe": "Whether to enable automatic save？[Y/n]",
