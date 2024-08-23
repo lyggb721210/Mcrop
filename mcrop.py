@@ -62,7 +62,7 @@ def choose_language_file():
             _a = int(_language) - 1
             if _a <= len(files):
                 file = "./lang/" + files[_a]
-                with open("./save/save.json", "w") as f:
+                with open("./save/save.json", "w", encoding='utf-8') as f:
                     f.write(json.dumps(
                         {
                             "save": True,
@@ -83,7 +83,7 @@ if __name__ == "__main__":
     # 检查存档6
     os.chdir(os.path.dirname(os.path.abspath(__file__)))
     try:
-        with open("./save/save.json", "r") as f:
+        with open("./save/save.json", "r" ,encoding='utf-8') as f:
             save = json.load(f)
 
         if 3.0 <= save["v"] <= 3.2:
@@ -91,7 +91,7 @@ if __name__ == "__main__":
             if save["save"]:
                 lever = save["lever"]
                 lang_file = save["lang_file"]
-                message = json.load(open(lang_file, "r"))
+                message = json.load(open(lang_file, "r" ,encoding='utf-8'))
                 print(message.get("menu"))
                 if lever != 0:
                     print(message.get("go_on_game"))
@@ -99,12 +99,12 @@ if __name__ == "__main__":
             else:
                 lever = 0
                 lang_file = choose_language_file()
-                message = json.load(open(lang_file, "r"))
+                message = json.load(open(lang_file, "r", encoding='utf-8'))
                 print(message.get("menu"))
                 print(message.get("clean_save"))
         else:
             lang_file = choose_language_file()
-            message = json.load(open(lang_file, "r"))
+            message = json.load(open(lang_file, "r", encoding='utf-8'))
             print(message.get("welcome"))
             print(message.get("menu"))
             print(message.get("clean_save"))
@@ -113,12 +113,12 @@ if __name__ == "__main__":
         # f.close()
     except:
         lang_file = choose_language_file()
-        message = json.load(open(lang_file, "r"))
+        message = json.load(open(lang_file, "r", encoding='utf-8'))
         print(message.get("menu"))
         lever = 0
         print(message.get("save_load_err1"))
 
-    with open("./maps.json", "r") as f:
+    with open("./maps.json", "r", encoding='utf-8') as f:
         the_map = json.load(f)
     last_print = "  "
     a = input("")
@@ -189,7 +189,7 @@ if __name__ == "__main__":
                         print(message.get("lever_end"), end="")
                         print(str(cost_time) + "s")
                         if auto_save:
-                            with open("./save/save.json", "w") as f:
+                            with open("./save/save.json", "w", encoding='utf-8') as f:
                                 f.write(json.dumps(
                                     {
                                         "save": True,
@@ -220,7 +220,7 @@ if __name__ == "__main__":
                                          user=user + Style.RESET_ALL, door=door + Style.RESET_ALL))
         input()
     elif a == "4":
-        with open("./save/save.json", "w") as f:
+        with open("./save/save.json", "w", encoding='utf-8') as f:
             f.write(json.dumps(
                 {
                     "v": 3.0,
