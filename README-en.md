@@ -8,15 +8,16 @@ This document is from machine translation.
 #### Introduction:
   Maze challenge (game) running on Python.(McroP)
 #### Other:
-  If the following error occurs at runtime
->ModuleNotFoundError: No module named 'colorama'
+  This project relies on the ``colorama`` and ``pygame`` libraries  
+  If an error like this occurs during runtime
+>ModuleNotFoundError: No module named 'XXX'
 
   The following instructions can be entered in the terminal.
 
-	pip install colorama
+	pip install colorama pygame
   or
 
-	pip3 install colorama
+	pip3 install colorama pygame
 #### Matters needing attention：
   All files need to be placed in the same directory and run the mcrop.py in it to work properly.
   
