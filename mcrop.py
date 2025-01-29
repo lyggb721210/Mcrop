@@ -3,7 +3,7 @@
 This is a maze challenge game on Python.
 Email 邮箱：lyggb721210@163.com
 Author 作者：lygyxr / lyggb721210 / yxr
-Version 当前版本：V1.1
+Version 当前版本：V2.0-pre1
 Please report any bugs to the author.
 如果有BUG请报告给作者。
 """
@@ -11,6 +11,8 @@ Please report any bugs to the author.
 import json
 import os
 import time
+from operator import index
+
 import pygame
 from sys import exit
 
@@ -22,6 +24,15 @@ road = Back.WHITE + Fore.WHITE + "  "
 user = Back.BLUE + Fore.BLUE + "  "
 door = Back.GREEN + Fore.GREEN + "  "
 save_v = 3.0
+ScreenSize = (1280, 720)
+
+
+def create_window():
+    screen = pygame.display.set_mode(ScreenSize)
+    pygame.display.set_caption("McroP")
+    clock = pygame.time.Clock()
+    screen.fill((135, 206, 250))
+    return screen, clock
 
 
 def get_map(plat: list, lever: int):
@@ -81,14 +92,15 @@ def choose_language_file():
             pass
 
 
-def put_map(themap, screen):
-    width = 50
-    x = 5
-    y = 5
+def put_map(themap: list, screen):
+    """画地图"""
+    width = (ScreenSize[1] - 50) // (len(themap) // (themap.index("\n") + 1))
+    x = (ScreenSize[0] - themap.index("\n") * width) // 2
+    y = 10
     for i in range(len(themap) - 1):
         if themap[i] == "\n":
             y = y + width
-            x = 5
+            x = (ScreenSize[0] - themap.index("\n") * width) // 2
         elif themap[i] == wall:
             pygame.draw.rect(screen, "red", (x, y, width, width), width=0)
             x = x + width
@@ -173,13 +185,11 @@ def main():
         time1 = time.time()
         pygame.init()
         while True:
-            screen = pygame.display.set_mode((1280, 720))
-            pygame.display.set_caption("McroP")
-            clock = pygame.time.Clock()
-            screen.fill((135, 206, 250))
+
+            screen, clock = create_window()
             put_map(in_map, screen)
             running = True
-            while running:
+            while running:  # 游戏主循环
                 pygame.display.update()
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:
@@ -191,7 +201,7 @@ def main():
                             if acd > 0 and in_map[acd] == road:
                                 in_map[add] = road
                                 in_map[acd] = user
-                                put_map(in_map,screen)
+                                put_map(in_map, screen)
                             elif in_map[acd] == door:
                                 pygame.quit()
                                 running = False
@@ -201,7 +211,7 @@ def main():
                             if acd > 0 and in_map[acd] == road:
                                 in_map[add] = road
                                 in_map[acd] = user
-                                put_map(in_map,screen)
+                                put_map(in_map, screen)
                             elif in_map[acd] == door:
                                 pygame.quit()
                                 running = False
@@ -211,7 +221,7 @@ def main():
                             if acd > 0 and in_map[acd] == road:
                                 in_map[add] = road
                                 in_map[acd] = user
-                                put_map(in_map,screen)
+                                put_map(in_map, screen)
                             elif in_map[acd] == door:
                                 pygame.quit()
                                 running = False
@@ -221,12 +231,12 @@ def main():
                             if acd > 0 and in_map[acd] == road:
                                 in_map[add] = road
                                 in_map[acd] = user
-                                put_map(in_map,screen)
+                                put_map(in_map, screen)
                             elif in_map[acd] == door:
                                 pygame.quit()
                                 running = False
             cost_time = round(time.time() - time1, 2)
-            while True:
+            while True:  # 过关结算循环
                 clear(os.name)
                 print(message.get("lever_end"), end="")
                 print(str(cost_time) + "s")
