@@ -2,12 +2,12 @@
 这是一个在Python上运行的迷宫挑战游戏
 This is a maze challenge game on Python.
 Email 邮箱：lyggb721210@163.com
-Version 当前版本：V2.0-pre1
+Version 当前版本：V2.0
 Please report any bugs to the author.
 如果有BUG请报告给作者。
 
 Copyright (c) 2025 yxrlyg & lyggb721210
-   Mcrop is licensed under Mulan PSL v2.
+   McroP is licensed under Mulan PSL v2.
    You can use this software according to the terms and conditions of the Mulan PSL v2.
    You may obtain a copy of Mulan PSL v2 at:
             http://license.coscl.org.cn/MulanPSL2
@@ -18,20 +18,157 @@ Copyright (c) 2025 yxrlyg & lyggb721210
 import json
 import os
 import time
-from operator import index
-
 import pygame
 from sys import exit
+from Setting import *
 
-from colorama import init, Back, Fore, Style
 
-init()
-wall = Back.LIGHTBLACK_EX + Fore.LIGHTBLACK_EX + "  "
-road = Back.WHITE + Fore.WHITE + "  "
-user = Back.BLUE + Fore.BLUE + "  "
-door = Back.GREEN + Fore.GREEN + "  "
-save_v = 3.0
-ScreenSize = (1280, 720)
+def main():
+    # 检查存档6
+    os.chdir(os.path.dirname(os.path.abspath(__file__)))
+    try:
+        with open("./save/save.json", "r", encoding='utf-8') as f:
+            save = json.load(f)
+
+        if 3.0 <= save["v"] <= 3.2:
+            # if len(save) >= 5 and float(save[0][0:4]) >= 2.12:
+            if save["save"]:
+                lever = save["lever"]
+                lang_file = save["lang_file"]
+                message = json.load(open(lang_file, "r", encoding='utf-8'))
+                print(message.get("menu"))
+                if lever != 0:
+                    print(message.get("go_on_game"))
+                print(message.get("clean_save"))
+            else:
+                lever = 0
+                lang_file = choose_language_file()
+                message = json.load(open(lang_file, "r", encoding='utf-8'))
+                print(message.get("menu"))
+                print(message.get("clean_save"))
+        else:
+            lang_file = choose_language_file()
+            message = json.load(open(lang_file, "r", encoding='utf-8'))
+            print(message.get("welcome"))
+            print(message.get("menu"))
+            print(message.get("clean_save"))
+            lever = 0
+            print(message.get("save_load_err1"))
+        # f.close()
+    except:
+        lang_file = choose_language_file()
+        message = json.load(open(lang_file, "r", encoding='utf-8'))
+        print(message.get("menu"))
+        lever = 0
+        print(message.get("save_load_err1"))
+
+    with open("./maps.json", "r", encoding='utf-8') as f:
+        the_map = json.load(f)
+    # last_print = "  "
+    a = input("")
+    # in_map = get_map(the_map["maps"], lever)
+    if a == "1":
+        lever = 0
+        in_map = get_map(the_map['maps'], lever)
+    if a == "3":
+        if not ("lever" in dir()):
+            # print(message.get("3error"))
+            exit()
+        else:
+            if lever >= len(the_map["maps"]) - 1:
+                print(message["end"])
+                exit()
+        in_map = get_map(the_map["maps"], lever)
+    if a == "1" or a == "3":
+        while True:
+            print(message["check_auto_safe"], end='')
+            q = input()
+            if q == "y" or q == "Y" or q == "":
+                auto_save = True
+                break
+            elif q == "N" or q == "n":
+                auto_save = False
+                break
+        # 游戏开始
+        time1 = time.time()
+        pygame.init()
+        while True:
+
+            screen, clock = create_window()
+            put_map(in_map, screen)
+            running = True
+            while running:  # 游戏主循环
+                pygame.display.update()
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        exit()
+                    elif event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_w:
+                            local = in_map.index(user)
+                            destination = local - in_map.index("\n") - 1
+                            running = move_user(in_map, screen, local, destination)
+                        elif event.key == pygame.K_a:
+                            local = in_map.index(user)
+                            destination = local - 1
+                            running = move_user(in_map, screen, local, destination)
+                        elif event.key == pygame.K_d:
+                            local = in_map.index(user)
+                            destination = local + 1
+                            running = move_user(in_map, screen, local, destination)
+                        elif event.key == pygame.K_s:
+                            local = in_map.index(user)
+                            destination = local + in_map.index("\n") + 1
+                            running = move_user(in_map, screen, local, destination)
+            cost_time = round(time.time() - time1, 2)
+            while True:  # 过关结算循环
+                clear(os.name)
+                print(message.get("lever_end"), end="")
+                print(str(cost_time) + "s")
+                if auto_save:
+                    with open("./save/save.json", "w", encoding='utf-8') as f:
+                        f.write(json.dumps(
+                            {
+                                "save": True,
+                                "v": 3.0,
+                                "lever": lever + 1,
+                                "lang_file": lang_file,
+                            },
+                            sort_keys=True,
+                            indent=4
+                        ))
+                    # f.close()
+                    print(message["autosafed"])
+                a = input("")
+                clear(os.name)
+                if a == "1":
+                    if lever < len(the_map["maps"]) - 1:
+                        lever = lever + 1
+                        in_map = get_map(the_map["maps"], lever)
+                        time1 = time.time()
+                        break
+                    elif lever >= len(the_map["maps"]) - 1:
+                        print(message["end"])
+                        exit()
+                elif a == "2":
+                    exit()
+    elif a == "2":
+        print(message.get("help").format(wall=wall + Style.RESET_ALL, road=road + Style.RESET_ALL,
+                                         user=user + Style.RESET_ALL, door=door + Style.RESET_ALL))
+        input()
+    elif a == "4":
+        with open("./save/save.json", "w", encoding='utf-8') as f:
+            f.write(json.dumps(
+                {
+                    "v": 3.0,
+                    "save": False,
+                },
+                sort_keys=True,
+                indent=4
+            ))
+        # f.close()
+
+    # else:
+    # print(message.get("input_err"))
 
 
 def create_window():
@@ -63,6 +200,7 @@ def get_map(plat: list, lever: int):
 
 
 def clear(system):
+    """清除终端中显示的内容"""
     if system == "posix":
         os.system("clear")
     elif system == "nt":
@@ -70,6 +208,7 @@ def clear(system):
 
 
 def choose_language_file():
+    """选择游戏的语言,返回语言文件的路径"""
     clear(os.name)
     while True:
         print("请选择您要使用的语言 Please select the language you want to use:")
@@ -122,245 +261,17 @@ def put_map(themap: list, screen):
             x = x + width
 
 
-def main():
-    # 检查存档6
-    os.chdir(os.path.dirname(os.path.abspath(__file__)))
-    try:
-        with open("./save/save.json", "r", encoding='utf-8') as f:
-            save = json.load(f)
-
-        if 3.0 <= save["v"] <= 3.2:
-            # if len(save) >= 5 and float(save[0][0:4]) >= 2.12:
-            if save["save"]:
-                lever = save["lever"]
-                lang_file = save["lang_file"]
-                message = json.load(open(lang_file, "r", encoding='utf-8'))
-                print(message.get("menu"))
-                if lever != 0:
-                    print(message.get("go_on_game"))
-                print(message.get("clean_save"))
-            else:
-                lever = 0
-                lang_file = choose_language_file()
-                message = json.load(open(lang_file, "r", encoding='utf-8'))
-                print(message.get("menu"))
-                print(message.get("clean_save"))
-        else:
-            lang_file = choose_language_file()
-            message = json.load(open(lang_file, "r", encoding='utf-8'))
-            print(message.get("welcome"))
-            print(message.get("menu"))
-            print(message.get("clean_save"))
-            lever = 0
-            print(message.get("save_load_err1"))
-        # f.close()
-    except:
-        lang_file = choose_language_file()
-        message = json.load(open(lang_file, "r", encoding='utf-8'))
-        print(message.get("menu"))
-        lever = 0
-        print(message.get("save_load_err1"))
-
-    with open("./maps.json", "r", encoding='utf-8') as f:
-        the_map = json.load(f)
-    last_print = "  "
-    a = input("")
-    in_map = get_map(the_map["maps"], lever)
-    if a == "1":
-        lever = 0
-        in_map = get_map(the_map['maps'], lever)
-    if a == "3":
-        if not ("lever" in dir()):
-            # print(message.get("3error"))
-            exit()
-        else:
-            if lever >= len(the_map["maps"]) - 1:
-                print(message["end"])
-                exit()
-            # in_map = get_map(the_map["maps"], lever)
-    if a == "1" or a == "3":
-        while True:
-            print(message["check_autosafe"], end='')
-            q = input()
-            if q == "y" or q == "Y" or q == "":
-                auto_save = True
-                break
-            elif q == "N" or q == "n":
-                auto_save = False
-                break
-        # 游戏开始
-        time1 = time.time()
-        pygame.init()
-        while True:
-
-            screen, clock = create_window()
-            put_map(in_map, screen)
-            running = True
-            while running:  # 游戏主循环
-                pygame.display.update()
-                for event in pygame.event.get():
-                    if event.type == pygame.QUIT:
-                        exit()
-                    elif event.type == pygame.KEYDOWN:
-                        if event.key == pygame.K_w:
-                            add = in_map.index(user)
-                            acd = add - in_map.index("\n") - 1
-                            if acd > 0 and in_map[acd] == road:
-                                in_map[add] = road
-                                in_map[acd] = user
-                                put_map(in_map, screen)
-                            elif in_map[acd] == door:
-                                pygame.quit()
-                                running = False
-                        elif event.key == pygame.K_a:
-                            add = in_map.index(user)
-                            acd = add - 1
-                            if acd > 0 and in_map[acd] == road:
-                                in_map[add] = road
-                                in_map[acd] = user
-                                put_map(in_map, screen)
-                            elif in_map[acd] == door:
-                                pygame.quit()
-                                running = False
-                        elif event.key == pygame.K_d:
-                            add = in_map.index(user)
-                            acd = add + 1
-                            if acd > 0 and in_map[acd] == road:
-                                in_map[add] = road
-                                in_map[acd] = user
-                                put_map(in_map, screen)
-                            elif in_map[acd] == door:
-                                pygame.quit()
-                                running = False
-                        elif event.key == pygame.K_s:
-                            add = in_map.index(user)
-                            acd = add + in_map.index("\n") + 1
-                            if acd > 0 and in_map[acd] == road:
-                                in_map[add] = road
-                                in_map[acd] = user
-                                put_map(in_map, screen)
-                            elif in_map[acd] == door:
-                                pygame.quit()
-                                running = False
-            cost_time = round(time.time() - time1, 2)
-            while True:  # 过关结算循环
-                clear(os.name)
-                print(message.get("lever_end"), end="")
-                print(str(cost_time) + "s")
-                if auto_save:
-                    with open("./save/save.json", "w", encoding='utf-8') as f:
-                        f.write(json.dumps(
-                            {
-                                "save": True,
-                                "v": 3.0,
-                                "lever": lever + 1,
-                                "lang_file": lang_file,
-                            },
-                            sort_keys=True,
-                            indent=4
-                        ))
-                    # f.close()
-                    print(message["autosafed"])
-                a = input("")
-                clear(os.name)
-                if a == "1":
-                    if lever < len(the_map["maps"]) - 1:
-                        lever = lever + 1
-                        in_map = get_map(the_map["maps"], lever)
-                        time1 = time.time()
-                        break
-                    elif lever >= len(the_map["maps"]) - 1:
-                        print(message["end"])
-                        exit()
-                elif a == "2":
-                    exit()
-
-        # while True:
-        #     clear(os.name)
-        #     c = 0
-        #     outmap = ""
-        #     while c != len(in_map):
-        #         outmap = outmap + in_map[c]
-        #         c = c + 1
-        #     print(outmap)
-        #     print(last_print)
-        #     print(message.get("in_game"))
-        #     b = input("")
-        #     if b == "w" or b == "W":
-        #         add = in_map.index(user)
-        #         acd = add - in_map.index("\n") - 1
-        #     elif b == "a" or b == "A":
-        #         add = in_map.index(user)
-        #         acd = add - 1
-        #     elif b == "d" or b == "D":
-        #         add = in_map.index(user)
-        #         acd = add + 1
-        #     elif b == "s" or b == "S":
-        #         add = in_map.index(user)
-        #         acd = add + in_map.index("\n") + 1
-        #     else:
-        #         last_print = message["err"]
-        #         continue
-        #     if acd <= 0:
-        #         last_print = message["hit_wall"]
-        #     elif acd > 0:
-        #         if in_map[acd] == wall:
-        #             last_print = message["hit_wall"]
-        #         elif in_map[acd] == road:
-        #             last_print = "  "
-        #             in_map[add] = road
-        #             in_map[acd] = user
-        #         elif in_map[acd] == door:
-        #             cost_time = round(time.time() - time1, 2)
-        #             while True:
-        #                 clear(os.name)
-        #                 print(message.get("lever_end"), end="")
-        #                 print(str(cost_time) + "s")
-        #                 if auto_save:
-        #                     with open("./save/save.json", "w", encoding='utf-8') as f:
-        #                         f.write(json.dumps(
-        #                             {
-        #                                 "save": True,
-        #                                 "v": 3.0,
-        #                                 "lever": lever + 1,
-        #                                 "lang_file": lang_file,
-        #                             },
-        #                             sort_keys=True,
-        #                             indent=4
-        #                         ))
-        #                     # f.close()
-        #                     print(message["autosafed"])
-        #                 a = input("")
-        #                 clear(os.name)
-        #                 if a == "1":
-        #                     if lever < len(the_map["maps"]) - 1:
-        #                         lever = lever + 1
-        #                         in_map = get_map(the_map["maps"], lever)
-        #                         time1 = time.time()
-        #                         break
-        #                     elif lever >= len(the_map["maps"]) - 1:
-        #                         print(message["end"])
-        #                         exit()
-        #                 elif a == "2":
-        #                     exit()
-    elif a == "2":
-        print(message.get("help").format(wall=wall + Style.RESET_ALL, road=road + Style.RESET_ALL,
-                                         user=user + Style.RESET_ALL, door=door + Style.RESET_ALL))
-        input()
-    elif a == "4":
-        with open("./save/save.json", "w", encoding='utf-8') as f:
-            f.write(json.dumps(
-                {
-                    "v": 3.0,
-                    "save": False,
-                },
-                sort_keys=True,
-                indent=4
-            ))
-        # f.close()
-
-    # else:
-    # print(message.get("input_err"))
+def move_user(in_map: list, screen, local: int, destination: int):
+    """根据destination的值移动人物，返回running"""
+    running = True
+    if destination > 0 and in_map[destination] == road:
+        in_map[local] = road
+        in_map[destination] = user
+        put_map(in_map, screen)
+    elif in_map[destination] == door:
+        pygame.quit()
+        running = False
+    return running
 
 
 if __name__ == '__main__':

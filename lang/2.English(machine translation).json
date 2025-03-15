@@ -9,7 +9,7 @@
     "help":"This is a map level game. \nIn the game, you can enter w, a, s, and d to control the movement of the blue square (press enter to confirm). \nThe {wall} is the wall, the {road} is the road, and the {door} is the endpoint. \nHave a pleasant game. \nPress Enter to exit.",
     "input_err":"Please enter the correct number.",
     "save_load_err1":"Error: Archive loading error. You can enter 4 to reset the archive.",
-    "check_autosafe": "Whether to enable automatic save？[Y/n]",
+    "check_auto_safe": "Whether to enable automatic save？[Y/n]",
     "autosafed": "Automatically saved",
     "go_on_game": " 3.Continue the game",
     "clean_save":  " 4.Clear Archive and Language and Exit",

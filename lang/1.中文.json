@@ -9,7 +9,7 @@
     "help": "这是一个地图闯关游戏\n在游戏中可以输入w,a,s,d来控制蓝色方块的移动(输入后要按enter表示确定)\n {wall}是墙，{road}是空地，{door}是终点\\n祝您游玩愉快 \\n按Enter键退出。",
     "input_err": "请输入正确的数字",
     "save_load_err1": "error:存档加载错误，可以输入4重置存档。",
-    "check_autosafe": "是否启用自动保存？[Y/n]",
+    "check_auto_safe": "是否启用自动保存？[Y/n]",
     "autosafed": "已自动保存",
     "go_on_game": " 3.继续游戏",
     "clean_save": " 4.清除存档和语言并退出",

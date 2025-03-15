@@ -1,6 +1,4 @@
 {
-    "lang_file": "./lang/1.\u4e2d\u6587.json",
-    "lever": 5,
-    "save": true,
+    "save": false,
     "v": 3.0
 }
