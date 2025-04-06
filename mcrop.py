@@ -2,7 +2,7 @@
 这是一个在Python上运行的迷宫挑战游戏
 This is a maze challenge game on Python.
 Email 邮箱：lyggb721210@163.com
-Version 当前版本：V2.0
+Version 当前版本：V2.1-pre1
 Please report any bugs to the author.
 如果有BUG请报告给作者。
 
@@ -21,6 +21,7 @@ import time
 import pygame
 from sys import exit
 from Setting import *
+import locale
 
 
 def main():
@@ -34,7 +35,7 @@ def main():
             # if len(save) >= 5 and float(save[0][0:4]) >= 2.12:
             if save["save"]:
                 lever = save["lever"]
-                lang_file = save["lang_file"]
+                lang_file = choose_language_file()
                 message = json.load(open(lang_file, "r", encoding='utf-8'))
                 print(message.get("menu"))
                 if lever != 0:
@@ -93,7 +94,6 @@ def main():
         time1 = time.time()
         pygame.init()
         while True:
-
             screen, clock = create_window()
             put_map(in_map, screen)
             running = True
@@ -103,20 +103,18 @@ def main():
                     if event.type == pygame.QUIT:
                         exit()
                     elif event.type == pygame.KEYDOWN:
+                        print(time.time() - time1)
+                        local = in_map.index(user)                     
                         if event.key == pygame.K_w:
-                            local = in_map.index(user)
                             destination = local - in_map.index("\n") - 1
                             running = move_user(in_map, screen, local, destination)
                         elif event.key == pygame.K_a:
-                            local = in_map.index(user)
                             destination = local - 1
                             running = move_user(in_map, screen, local, destination)
                         elif event.key == pygame.K_d:
-                            local = in_map.index(user)
                             destination = local + 1
                             running = move_user(in_map, screen, local, destination)
                         elif event.key == pygame.K_s:
-                            local = in_map.index(user)
                             destination = local + in_map.index("\n") + 1
                             running = move_user(in_map, screen, local, destination)
             cost_time = round(time.time() - time1, 2)
@@ -209,33 +207,32 @@ def clear(system):
 
 def choose_language_file():
     """选择游戏的语言,返回语言文件的路径"""
-    clear(os.name)
-    while True:
-        print("请选择您要使用的语言 Please select the language you want to use:")
-        files = os.listdir("./lang")
-        for i in files:
-            print(i)
-        print("请输入前面序号。Please enter the preceding serial number.")
-        _language = input()
-        try:
-            _a = int(_language) - 1
-            if _a <= len(files):
-                file = "./lang/" + files[_a]
-                with open("./save/save.json", "w", encoding='utf-8') as f:
-                    f.write(json.dumps(
-                        {
-                            "save": True,
-                            "v": save_v,
-                            "lever": 0,
-                            "lang_file": file,
-                        },
-                        sort_keys=True,
-                        indent=4
-                    ))
-                return file
+    # clear(os.name)
+    system_lang = locale.getdefaultlocale()[0].split('_')[0]
+    files = os.listdir("./lang")
+    lang_mapping = {file.split('.')[0]: file for file in files}
+    if system_lang in lang_mapping:
+        file = "./lang/" + lang_mapping[system_lang]
 
-        except ValueError:
-            pass
+    else:
+        if "en.json" in lang_mapping:
+            file = "./lang/" + lang_mapping["en"]
+        else:
+            print(Fore.RED + "err:Language file not found." + Style.RESET_ALL)
+            exit(1)
+
+    with open("./save/save.json", "w", encoding='utf-8') as f:
+        f.write(json.dumps(
+            {
+                "save": True,
+                "v": save_v,
+                "lever": 0,
+                "lang_file": file,
+            },
+            sort_keys=True,
+            indent=4
+        ))
+    return file
 
 
 def put_map(themap: list, screen):
